@@ -1,4 +1,4 @@
-#!/bin/bash -xf
+#!/bin/bash -f
 
 . /etc/rc.conf
 . /etc/rc.d/functions
@@ -10,11 +10,10 @@ USER=pschmitt
 [ -r /etc/conf.d/$DAEMON ] && . /etc/conf.d/$DAEMON
 
 [ -r /tmp/bounzend.pid ] && PID=$(cat /tmp/bounzend.pid)
-
 case "$1" in
     start)
         stat_busy "Starting $DAEMON"
-        [ -z "$PID" ] && su $USER -c "$DAEMON $ARGS &" &>/dev/null
+        [ -z "$PID" ] && su $USER -c "$DAEMON $ARGS &" &>/dev/null &
         if [ $? = 0 ]; then
             add_daemon $DAEMON
             stat_done
@@ -26,7 +25,7 @@ case "$1" in
     stop)
         stat_busy "Stopping $DAEMON"
         [ -n "$PID" ] && kill $PID &>/dev/null
-        if [ $? -gt 0 ]; then
+        if [ $? = 0 ]; then
             rm_daemon $DAEMON
             stat_done
         else

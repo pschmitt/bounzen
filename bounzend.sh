@@ -40,6 +40,6 @@ while :;do
     fi
     # echo "n $1 ended"
     sleep 1
-done &
+done
 
 return 0
